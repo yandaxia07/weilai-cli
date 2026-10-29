@@ -34,16 +34,16 @@ var keyRe = regexp.MustCompile(`^spk_\d{1,4}_[A-Za-z0-9]{32}$`)
 
 // 子命令 → MCP 工具；第一个位置参数填到哪个参数名（没有则为空）
 var shortcuts = map[string][2]string{
-	"balance":  {"get_balance", ""},
-	"topics":   {"list_topics", ""},
-	"topic":    {"get_topic_detail", "topic_id"},
-	"accounts": {"search_benchmark_accounts", "keyword"},
-	"videos":   {"list_benchmark_videos", "keyword"},
-	"video":    {"get_video_detail", "video_id"},
-	"poster":   {"generate_moment_poster", "title"},
+	"balance":    {"get_balance", ""},
+	"topics":     {"list_topics", ""},
+	"topic":      {"get_topic_detail", "topic_id"},
+	"accounts":   {"search_benchmark_accounts", "keyword"},
+	"videos":     {"list_benchmark_videos", "keyword"},
+	"video":      {"get_video_detail", "video_id"},
+	"poster":     {"generate_moment_poster", "title"},
 	"poster-get": {"get_moment_poster", "task_id"},
-	"note":     {"generate_note_images", "copy"},
-	"note-get": {"get_note_images", "draft_id"},
+	"note":       {"generate_note_images", "copy"},
+	"note-get":   {"get_note_images", "draft_id"},
 }
 
 func main() {
