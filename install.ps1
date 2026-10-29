@@ -3,7 +3,9 @@
 $ErrorActionPreference = 'Stop'
 $manifestUrl = if ($env:WEILAI_MANIFEST_URL) { $env:WEILAI_MANIFEST_URL } else { 'https://raw.githubusercontent.com/yandaxia07/weilai-cli/main/releases/manifest.json' }
 $dir = if ($env:WEILAI_INSTALL_DIR) { $env:WEILAI_INSTALL_DIR } else { Join-Path $env:USERPROFILE '.weilai\bin' }
-$m = Invoke-RestMethod $manifestUrl
+# 先读 GitHub，读不到用国内镜像（同一批文件、同样的 sha256）
+try { $m = Invoke-RestMethod $manifestUrl -TimeoutSec 20 }
+catch { if ($env:WEILAI_MANIFEST_URL) { throw } ; $m = Invoke-RestMethod 'https://luluyouai.com/downloads/weilai-cli/manifest.json' -TimeoutSec 30 }
 $v = $m.latest
 $name = "weilai-$v-windows-amd64.zip"
 $f = $m.files.$name
@@ -11,7 +13,8 @@ if (-not $f -or $f.sha256.Length -ne 64) { throw "manifest 里没有 Windows 版
 $tmp = Join-Path ([IO.Path]::GetTempPath()) ("weilai-" + [guid]::NewGuid())
 New-Item -ItemType Directory -Path $tmp | Out-Null
 $zip = Join-Path $tmp $name
-Invoke-WebRequest $f.url -OutFile $zip -UseBasicParsing
+try { Invoke-WebRequest $f.url -OutFile $zip -UseBasicParsing -TimeoutSec 60 }
+catch { Invoke-WebRequest "https://luluyouai.com/downloads/weilai-cli/$v/$name" -OutFile $zip -UseBasicParsing }
 $got = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLower()
 if ($got -ne $f.sha256) { throw "sha256 校验不通过（期望 $($f.sha256)，实际 $got）" }
 Expand-Archive $zip -DestinationPath $tmp -Force

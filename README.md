@@ -18,7 +18,7 @@ Windows（PowerShell）：
 irm https://raw.githubusercontent.com/yandaxia07/weilai-cli/main/install.ps1 | iex
 ```
 
-安装脚本读取 `releases/manifest.json`，下载本平台的发布包并强制校验 sha256，校验不过直接退出。支持 macOS（arm64、x64）、Linux（x64、arm64）、Windows（x64）。
+安装脚本读取 `releases/manifest.json`（读不到 GitHub 时自动改用国内镜像 luluyouai.com/downloads/weilai-cli/），下载本平台的发布包并强制校验 sha256，校验不过直接退出。支持 macOS（arm64、x64）、Linux（x64、arm64）、Windows（x64）。
 
 ## 获取 API key
 

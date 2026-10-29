@@ -10,7 +10,11 @@ case "$(uname -s)" in Darwin) os=darwin ;; Linux) os=linux ;; *) fatal "不支�
 case "$(uname -m)" in arm64|aarch64) arch=arm64 ;; x86_64|amd64) arch=amd64 ;; *) fatal "不支持的架构 $(uname -m)" ;; esac
 command -v curl >/dev/null || fatal "需要 curl"
 tmp="$(mktemp -d)"; trap 'rm -rf "$tmp"' EXIT
-curl -fsSL "$MANIFEST_URL" -o "$tmp/manifest.json" || fatal "下载 manifest 失败"
+# 先读 GitHub；大陆网络直连常超时，读不到就用国内镜像（luluyouai.com，与 release 同一批文件、同样的 sha256）
+MIRROR_URL="https://luluyouai.com/downloads/weilai-cli/manifest.json"
+curl -fsSL --connect-timeout 8 --max-time 20 "$MANIFEST_URL" -o "$tmp/manifest.json" \
+  || { [ -z "${WEILAI_MANIFEST_URL:-}" ] && curl -fsSL --max-time 30 "$MIRROR_URL" -o "$tmp/manifest.json"; } \
+  || fatal "下载 manifest 失败"
 # manifest 是 scripts/build.sh 写的缩进 JSON：按文件名那一段取 url 与 sha256（不依赖 python / jq）
 ver=$(sed -n 's/.*"latest": *"\([^"]*\)".*/\1/p' "$tmp/manifest.json" | head -1)
 [ -n "$ver" ] || fatal "manifest 格式不对"
@@ -18,7 +22,10 @@ block=$(awk -v f="\"weilai-$ver-$os-$arch.tar.gz\"" 'index($0, f) {on=1} on {pri
 url=$(printf '%s\n' "$block" | sed -n 's/.*"url": *"\([^"]*\)".*/\1/p')
 sum=$(printf '%s\n' "$block" | sed -n 's/.*"sha256": *"\([0-9a-f]*\)".*/\1/p')
 [ -n "${sum:-}" ] && [ ${#sum} -eq 64 ] || fatal "manifest 里没有本平台（$os-$arch）的有效 sha256"
-curl -fsSL "$url" -o "$tmp/w.tar.gz" || fatal "下载失败 $url"
+if ! curl -fsSL --connect-timeout 8 "$url" -o "$tmp/w.tar.gz"; then
+  # 发布包下载不动时换镜像同名文件（sha256 仍按 manifest 校验）
+  curl -fsSL "https://luluyouai.com/downloads/weilai-cli/$ver/${url##*/}" -o "$tmp/w.tar.gz" || fatal "下载失败 $url"
+fi
 if command -v shasum >/dev/null; then got=$(shasum -a 256 "$tmp/w.tar.gz" | cut -d' ' -f1); else got=$(sha256sum "$tmp/w.tar.gz" | cut -d' ' -f1); fi
 [ "$got" = "$sum" ] || fatal "sha256 校验不通过（期望 $sum，实际 $got）"
 tar -xzf "$tmp/w.tar.gz" -C "$tmp"
