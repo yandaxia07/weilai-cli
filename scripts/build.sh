@@ -15,12 +15,12 @@ for t in $targets; do
   CGO_ENABLED=0 GOOS=$os GOARCH=$arch $GO build -trimpath -ldflags "-s -w -X main.version=$V" -o "$out" .
   cp "$out" "dist/npm/vendor/"
   if [ "$os" = windows ]; then
-    (cd dist/bin && zip -q -j "weilai-$V-$os-$arch.zip" "weilai-$os-$arch$ext")
+    python3 -c "import sys,zipfile; z=zipfile.ZipFile(sys.argv[1],'w',zipfile.ZIP_DEFLATED); z.write(sys.argv[2], sys.argv[3]); z.close()" \
+      "dist/weilai-$V-$os-$arch.zip" "$out" "weilai-$os-$arch$ext"
   else
     tar -C dist/bin -czf "dist/weilai-$V-$os-$arch.tar.gz" "weilai-$os-$arch"
   fi
 done
-mv dist/bin/*.zip dist/
 # npm 包：bin/weilai.js 按平台挑 vendor 里的二进制
 cp npm/bin/weilai.js dist/npm/
 mkdir -p dist/npm/bin && mv dist/npm/weilai.js dist/npm/bin/
