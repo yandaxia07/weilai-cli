@@ -5,8 +5,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 V="${1:?用法: release.sh <版本号>}"
 bash scripts/build.sh "$V"
-cp dist/manifest.json releases/manifest.json
-git add releases/manifest.json && git commit -q -m "release: v$V" -- releases/manifest.json || true
+mkdir -p releases && cp dist/manifest.json releases/manifest.json
+git add releases/manifest.json && { git diff --cached --quiet || git commit -q -m "release: v$V" -- releases/manifest.json; }
 git tag -f "v$V"
 git push -q origin HEAD:main && git push -q -f origin "v$V"
 git push -q github HEAD:main && git push -q -f github "v$V"
