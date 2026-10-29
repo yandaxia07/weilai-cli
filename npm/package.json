@@ -1,0 +1,10 @@
+{
+  "name": "weilai-cli",
+  "version": "__VERSION__",
+  "description": "未来员工命令行：WorkBuddy CLI 连接器用（扫码领取 API key、查询与生成）",
+  "bin": { "weilai": "bin/weilai.js" },
+  "files": ["bin", "vendor", "README.md"],
+  "license": "MIT",
+  "repository": "github:yandaxia07/weilai-cli",
+  "engines": { "node": ">=16" }
+}
