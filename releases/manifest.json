@@ -1,0 +1,35 @@
+{
+  "latest": "0.1.0",
+  "files": {
+    "weilai-0.1.0-darwin-amd64.tar.gz": {
+      "url": "https://github.com/yandaxia07/weilai-cli/releases/download/v0.1.0/weilai-0.1.0-darwin-amd64.tar.gz",
+      "sha256": "6f115618d89afb98f0e5f4e7c5732aae562803daabab170c012ec9658214a0cd",
+      "size": 2992561
+    },
+    "weilai-0.1.0-darwin-arm64.tar.gz": {
+      "url": "https://github.com/yandaxia07/weilai-cli/releases/download/v0.1.0/weilai-0.1.0-darwin-arm64.tar.gz",
+      "sha256": "0c5d18c06896d476feab17aad36aab6905274b54a9de6912de3652f35e617d91",
+      "size": 2742947
+    },
+    "weilai-0.1.0-linux-amd64.tar.gz": {
+      "url": "https://github.com/yandaxia07/weilai-cli/releases/download/v0.1.0/weilai-0.1.0-linux-amd64.tar.gz",
+      "sha256": "30d312e78890e6c57ab698ef86a13b16f596be8a22d3a2781b40f483836d30f9",
+      "size": 2945926
+    },
+    "weilai-0.1.0-linux-arm64.tar.gz": {
+      "url": "https://github.com/yandaxia07/weilai-cli/releases/download/v0.1.0/weilai-0.1.0-linux-arm64.tar.gz",
+      "sha256": "4134c776338bff63d15f6fc6830fce016e665a5435cd3e3bdf3441c7f20a43cc",
+      "size": 2642800
+    },
+    "weilai-0.1.0-windows-amd64.zip": {
+      "url": "https://github.com/yandaxia07/weilai-cli/releases/download/v0.1.0/weilai-0.1.0-windows-amd64.zip",
+      "sha256": "0a13a409ef5fabf75ceed885e71e9cbd4151ec7188e4262a46db6550af5de75b",
+      "size": 3011587
+    },
+    "weilai-cli-0.1.0.tgz": {
+      "url": "https://github.com/yandaxia07/weilai-cli/releases/download/v0.1.0/weilai-cli-0.1.0.tgz",
+      "sha256": "eaed059e93d1fdf04897732ed331e6e67187e0bda0c363c785c3e15fb1902308",
+      "size": 14255879
+    }
+  }
+}
